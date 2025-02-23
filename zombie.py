@@ -12,7 +12,16 @@ import torch.optim as optim
 from sklearn.decomposition import PCA
 from scipy.linalg import expm
 import mss  # For screen capture
+from transformers import GPTJForCausalLM, AutoTokenizer
 
+model_name = "EleutherAI/gpt-j-6B"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = GPTJForCausalLM.from_pretrained(model_name)
+
+input_text = "Explain quantum computing in simple terms."
+inputs = tokenizer(input_text, return_tensors="pt")
+outputs = model.generate(**inputs, max_length=100)
+print(tokenizer.decode(outputs[0]))
 # Define log file path
 log_file_path = "C:\\Users\\Chandler\\Desktop\\logfrank.txt"
 
