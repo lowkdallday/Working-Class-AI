@@ -1,8 +1,6 @@
 import cv2
 import mss
 import numpy as np
-import random
-import logging
 
 class RoomScanner:
     def __init__(self):

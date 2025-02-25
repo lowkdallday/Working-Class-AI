@@ -1,14 +1,13 @@
 import time
-import random
-from modules.pathfinding import Pathfinding
-from modules.room_scanner import RoomScanner
-from modules.ammo_handler import AmmoHandler
-from modules.movement import Movement
-from modules.micro_ai import MicroAI
-from modules.daredevil_ai import DaredevilAI
 import logging
+from pathfinding import Pathfinding
+from Modules.room_scanner import RoomScanner
+from Modules.ammo_handler import AmmoHandler
+from Modules.movement import Movement
+from Modules.micro_ai import MicroAI
+from Modules.daredevil_ai import DaredevilAI
 
-# Set up logging
+# Logging setup
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s", handlers=[
     logging.FileHandler("franklog.txt"),
     logging.FileHandler("masterlog.txt")
@@ -21,11 +20,11 @@ class FrankAI:
         self.room_scanner = RoomScanner()
         self.ammo_handler = AmmoHandler()
         self.movement = Movement()
-        self.micro_ai = MicroAI()  # Micro's AI
-        self.daredevil_ai = DaredevilAI()  # Daredevil's AI
-        self.max_health = 100
-        self.health = self.max_health
+        self.micro_ai = MicroAI()
+        self.daredevil_ai = DaredevilAI()
+        self.health = 100
         self.ammo = 100
+        self.points = 500  # Starting points for buying weapons and perks
 
     def take_control(self):
         self.state = "Player"
@@ -33,30 +32,27 @@ class FrankAI:
         self.play_game()
 
     def play_game(self):
-        """Main game loop where Frank plays."""
+        """Main loop for Frank's actions."""
         while True:
             self.scan_environment()
             self.make_decision()
-
-            time.sleep(0.1)  # Smooth action updates
+            time.sleep(0.1)  # Smooth game updates
 
     def scan_environment(self):
-        """Scan the environment for enemies, ammo, and obstacles."""
+        """Gather data on surroundings."""
         self.room_scanner.scan_for_enemies()
         self.room_scanner.scan_for_ammo()
-
-        # Micro and Daredevil AI interactions
         self.micro_ai.assess_ammo(self.ammo_handler.ammo)
         self.daredevil_ai.detect_threats(self.room_scanner.room_data)
 
     def make_decision(self):
-        """Make decisions based on reports from other modules."""
+        """Decision-making based on AI reports."""
         if self.daredevil_ai.threat_detected:
             self.daredevil_ai.combat_advice()
             self.movement.move_to_enemy()
         elif self.micro_ai.ammo_strategy == 'conservative':
             self.micro_ai.suggest_tactical_move()
-            self.movement.move_randomly()
+            self.movement.move_tactically()
         else:
             self.movement.move_randomly()
 

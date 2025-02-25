@@ -1,5 +1,4 @@
 import logging
-import random
 
 class DaredevilAI:
     def __init__(self):

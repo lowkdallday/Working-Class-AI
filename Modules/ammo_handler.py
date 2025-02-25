@@ -1,6 +1,3 @@
-import logging
-
-# ...existing code...
 class AmmoHandler:
     def __init__(self):
         self.ammo = 100
